@@ -12,7 +12,8 @@ import base64
 
 def url_open(url):
     req = urllib.request.Request(url)
-    req.add_header('User-Agent','Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:36.0) Gecko/20100101 Firefox/36.0')
+    # req.add_header('User-Agent','Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:36.0) Gecko/20100101 Firefox/36.0')
+    req.add_header('User-Agent','Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3359.181 Safari/537.36')
     response = urllib.request.urlopen(req)
     return response.read()
 
@@ -41,8 +42,9 @@ def get_page(url):
 def find_imgs(page_url):
 
     # pattern = r'<img src="(.*?\.jpg)"'
-    # pattern = r'<span class="img-hash">(.*?)</span>"'
-    pattern = r'\<span\sclass=\"img-hash\"\>'
+    pattern = r'\<span\sclass=\"img-hash\"\>(.*?)\<\/span\>'
+    # pattern = r'\<span\sclass=\"img-hash\"\>'
+    # pattern = r''
 
     html = url_open(page_url).decode('utf-8')
     #图片的 url 经过了 base64 编码
@@ -58,10 +60,12 @@ def save_imgs(img_addrs,page_num,folder):
         os.mkdir(str(page_num))
     os.chdir(str(page_num))
     for i in img_addrs:
-        a = base64.b64decode(i)
-        pattern = r'sinaimg.cn/mw600/(.*?).jpg'
+        a = 'http:'+(base64.b64decode(i).decode("utf-8"))
+        print('a:', a)
+        # pattern = r'sinaimg.cn/mw600/(.*?).jpg'
         filename = a.split('/')[-1]
-        image = url_open(i)
+        # print('filename:', filename)
+        image = url_open(a)
         with open(filename,'wb') as f:
             f.write(image)
             f.close()
