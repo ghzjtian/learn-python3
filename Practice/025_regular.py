@@ -33,5 +33,7 @@ assert name_of_email('tom@voyager.org') == 'tom'
 print('ok2')
 
 
-
-
+addr = 'someone@gmai@l.com'
+# m = re.match(r'^[\w_.]+@([\w_.]+?).(\w+)$', addr)
+m = re.findall(r'@([\w_.]+?)',addr)
+print(m)
